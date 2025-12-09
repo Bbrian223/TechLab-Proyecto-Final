@@ -1,22 +1,24 @@
 import { db } from "../firebase/data.js"
 import { UserSchema } from "../models/user.model.js"
 import bcrypt from "bcrypt";
+import "dotenv/config"
 import {
     collection,
     getDoc,
     getDocs,
     addDoc,
+    deleteDoc,
     doc,
     query,
     where
 } from "firebase/firestore"
 
-const userCollection = collection(db,"users");
+const userCollection = collection(db,process.env.USER_COLLECTION_NAME);
 
 async function validateUser(email,pass) {
     const q = query(userCollection, where("Email","==",email));
     const snapshot = await getDocs(q);
-
+    console.log(process.env.USER_COLLECTION_NAME)
     if(snapshot.empty)
         return null;
 
